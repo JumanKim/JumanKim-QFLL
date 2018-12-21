@@ -9,7 +9,7 @@ Jupyter notebook은 공동으로 python 작업을 하는경우에 적합한 컴�
 
 ## 1. Python 개발환경 만들기
 1. https://www.anaconda.com/download/ 에 접속하여 anaconda의 가장 최신 버전(현재 ver 3.7)을 설치합니다. 모두 기본설정으로 하고 Next를 계속 누릅니다.
-2. 설치가 끝나면 Anaconda Prompt 를 실행시키고 conda install -c conda-forge bqplot 를 쓰고 엔터를 누릅니다.![image.png](attachment:image.png)
+2. 설치가 끝나면 Anaconda Prompt 를 실행시키고 conda install -c conda-forge bqplot 를 쓰고 엔터를 누릅니다.![image.png](files:bqplot_install.png)
 
 3. bqplot 설치가 끝나면 anaconda navigator를 실행시킵니다.
 4. 처음 페이지를 보시면 jupyter notebook이 있는데 Launch 를 누릅니다.![image.png](attachment:image.png)
