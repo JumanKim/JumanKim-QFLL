@@ -26,12 +26,12 @@ sys.executable
 
 
 
-    'C:\\Users\\kjman\\AppData\\Local\\Continuum\\anaconda3\\python.exe'
+
 
 
 
 6. 결과로 나온 경로는 파이썬이 실행될 때 module을 가져오는 폴더입니다. anaconda3의 하위 폴더 중 Lib\site-packages 폴더로 갑니다.
-7. site-packages 폴더 안에 제가 드린 dynamical_barrier.py 를 붙여넣습니다. 
+7. site-packages 폴더 안에 https://github.com/JumanKim/JumanKim-QFLL/tree/master/Penrose_simulation 의 dynamical_barrier.py 를 붙여넣습니다. 
 8. Jupyter notebook 용 폴더를 하나 만들어서 그 안에 Penrose_simulation.ipynb 파일을 넣고 엽니다.
 9. Kernel에서 Restart&Run All 을 누르시면 interactive plot을 실행할 수 있습니다.
 
