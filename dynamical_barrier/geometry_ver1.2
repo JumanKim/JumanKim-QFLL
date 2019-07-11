@@ -1,0 +1,314 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Sat Jul 14 12:18:46 2018
+
+@author: user
+"""
+# ver1.2 : Control right ellipse size  
+
+import numpy as np
+import math
+from matplotlib import pyplot as plt
+# In[]
+def plot_line(ipt, fpt, col,ax):
+    q = 10
+    xstep=(fpt[0]-ipt[0])/q
+    ystep=(fpt[1]-ipt[1])/q
+
+    if(ipt[0]==fpt[0]):
+        x = np.ones(q+1)
+        x *= ipt[0]
+
+        y=np.arange(ipt[1],fpt[1],ystep)
+        y=np.append(y,[fpt[1]])
+    if(ipt[1]==fpt[1]):
+        x=np.arange(ipt[0],fpt[0],xstep)
+        x=np.append(x,[fpt[0]])
+        y = np.ones(q+1)
+        y *= ipt[1]
+
+    if(ipt[0]==fpt[0] and ipt[1]==fpt[1]):
+        x = np.ones(q+1)
+        x *= ipt[0]
+        y = np.ones(q+1)
+        y *= ipt[1]
+    elif((ipt[0] != fpt[0]) and (ipt[1] != fpt[1])):
+        x=np.arange(ipt[0],fpt[0],xstep)
+        x=np.append(x,[fpt[0]])
+        y=np.arange(ipt[1],fpt[1],ystep)
+        y=np.append(y,[fpt[1]])
+
+
+    if(col==0):
+        ax.plot(x,y,'m',linewidth = 5)
+    if(col==1):
+        ax.plot(x,y,'b', linewidth = 0.5)
+    if(col==2):
+        ax.plot(x,y,'r', linewidth = 0.5)
+
+# In[5]:
+def plot_ellipse(a,b,xdis,ydis,iang,fang,ax): #xdisplacement, ydisplacement, initial_angle, final_angle
+    q=100
+    step = (fang-iang)/q
+    x=np.ones(q+1)
+    y=np.ones(q+1)
+
+    for t in range(q+1):
+        theta = iang + step*t
+        x[t] *= (xdis+a*np.cos(theta))
+        y[t] *= (ydis+b*np.sin(theta))
+
+    ax.plot(x,y,'m',linewidth = 5)
+# In[6]:
+def draw_walls(wmmperpixel,hmmperpixel,ax):
+    a=3/wmmperpixel
+    b=4.8/hmmperpixel
+    a1=3/wmmperpixel
+    b1=1.945/hmmperpixel
+    c=0.9/hmmperpixel
+
+    k = np.sqrt(np.absolute(a**2-b**2))
+    xdisp=6/wmmperpixel
+    ydisp=4.8/hmmperpixel
+    if wmmperpixel==1 and hmmperpixel==1:
+        xdisp=0.
+        ydisp=0.
+
+    w=0
+
+    ipt = np.array([-a1+xdisp,b+ydisp])
+    fpt = np.array([-c+xdisp,b+ydisp])
+    plot_line(ipt,fpt,w,ax)
+
+    ipt = np.array([-a1+xdisp,k+ydisp])
+    fpt = np.array([-c+xdisp,k+ydisp])
+    plot_line(ipt,fpt,w,ax)
+
+    ipt = np.array([c+xdisp,b+ydisp])
+    fpt = np.array([a1+xdisp,b+ydisp])
+    plot_line(ipt,fpt,w,ax)
+
+    ipt = np.array([c+xdisp,k+ydisp])
+    fpt = np.array([a1+xdisp,k+ydisp])
+    plot_line(ipt,fpt,w,ax)
+
+    ipt = np.array([-a1+xdisp,-k+ydisp])
+    fpt = np.array([-c+xdisp,-k+ydisp])
+    plot_line(ipt,fpt,w,ax)
+
+    ipt = np.array([-a1+xdisp,-b+ydisp])
+    fpt = np.array([-c+xdisp,-b+ydisp])
+    plot_line(ipt,fpt,w,ax)
+
+    ipt = np.array([c+xdisp,-k+ydisp])
+    fpt = np.array([a1+xdisp,-k+ydisp])
+    plot_line(ipt,fpt,w,ax)
+
+    ipt = np.array([c+xdisp,-b+ydisp])
+    fpt = np.array([a1+xdisp,-b+ydisp])
+    plot_line(ipt,fpt,w,ax)
+
+    ipt = np.array([-c+xdisp,k+ydisp])
+    fpt = np.array([-c+xdisp,b+ydisp])
+    plot_line(ipt,fpt,w,ax)
+
+    ipt = np.array([-c+xdisp,-k+ydisp])
+    fpt = np.array([-c+xdisp,-b+ydisp])
+    plot_line(ipt,fpt,w,ax)
+
+    ipt = np.array([c+xdisp,k+ydisp])
+    fpt = np.array([c+xdisp,b+ydisp])
+    plot_line(ipt,fpt,w,ax)
+
+    ipt = np.array([c+xdisp,-k+ydisp])
+    fpt = np.array([c+xdisp,-b+ydisp])
+    plot_line(ipt,fpt,w,ax)
+
+    plot_ellipse(a,b,-a1+xdisp,ydisp,np.pi/2,3*np.pi/2,ax)
+    plot_ellipse(a,b,a1+xdisp,ydisp,-np.pi/2,np.pi/2,ax)
+    plot_ellipse(a1,b1,xdisp,-k+ydisp,0,np.pi,ax)
+    plot_ellipse(a1,b1,xdisp,k+ydisp,np.pi,2*np.pi,ax)
+
+    #plt.show()
+def draw_walls_cleaved(wmmperpixel,hmmperpixel,dist,a2):
+    #distance: mm 단위로
+    a=3/wmmperpixel
+    b=4.8/hmmperpixel
+    a1=3/wmmperpixel
+    b1=1.945/hmmperpixel
+    c=0.9/hmmperpixel
+
+    k = np.sqrt(np.absolute(a**2-b**2))
+    b2=np.sqrt(a2**2-k**2)
+    xdisp=6/wmmperpixel
+    ydisp=4.8/hmmperpixel
+    if wmmperpixel==1 and hmmperpixel==1:
+        xdisp=0.
+        ydisp=0.
+
+    w=0
+
+    ipt = np.array([-a1+xdisp,b+ydisp])
+    fpt = np.array([-c+xdisp,b+ydisp])
+    plot_line(ipt,fpt,w,ax)
+
+    ipt = np.array([-a1+xdisp+dist,k+ydisp])
+    fpt = np.array([-c+xdisp,k+ydisp])
+    plot_line(ipt,fpt,w,ax)
+
+    #new lines
+    ipt=np.array([-a1+xdisp+dist,k+ydisp])
+    fpt=np.array([-a1+xdisp+dist,k+ydisp-b1*np.sqrt(1-((a1-dist)/a1)**2)])
+    plot_line(ipt,fpt,w,ax)
+
+    ipt=np.array([a1+xdisp-dist,k+ydisp])
+    fpt=np.array([a1+xdisp-dist,k+ydisp-b1*np.sqrt(1-((a1-dist)/a1)**2)])
+    plot_line(ipt,fpt,w,ax)
+    
+    ipt=np.array([-a1+xdisp+dist,-k+ydisp])
+    fpt=np.array([-a1+xdisp+dist,-k+ydisp+b1*np.sqrt(1-((a1-dist)/a1)**2)])
+    plot_line(ipt,fpt,w,ax)
+    
+    ipt=np.array([a1+xdisp-dist,-k+ydisp])
+    fpt=np.array([a1+xdisp-dist,-k+ydisp+b1*np.sqrt(1-((a1-dist)/a1)**2)])
+    plot_line(ipt,fpt,w,ax)    
+    #end
+
+    ipt = np.array([c+xdisp,b2+ydisp])
+    fpt = np.array([a1+xdisp,b2+ydisp])
+    plot_line(ipt,fpt,w,ax)
+
+    ipt = np.array([c+xdisp,k+ydisp])
+    fpt = np.array([a1+xdisp-dist,k+ydisp])
+    plot_line(ipt,fpt,w,ax)
+
+    ipt = np.array([-a1+xdisp+dist,-k+ydisp])
+    fpt = np.array([-c+xdisp,-k+ydisp])
+    plot_line(ipt,fpt,w,ax)
+
+    ipt = np.array([-a1+xdisp,-b+ydisp])
+    fpt = np.array([-c+xdisp,-b+ydisp])
+    plot_line(ipt,fpt,w,ax)
+
+    ipt = np.array([c+xdisp,-k+ydisp])
+    fpt = np.array([a1+xdisp-dist,-k+ydisp])
+    plot_line(ipt,fpt,w,ax)
+
+    ipt = np.array([c+xdisp,-b2+ydisp])
+    fpt = np.array([a1+xdisp,-b2+ydisp])
+    plot_line(ipt,fpt,w,ax)
+
+    ipt = np.array([-c+xdisp,k+ydisp])
+    fpt = np.array([-c+xdisp,b+ydisp])
+    plot_line(ipt,fpt,w,ax)
+
+    ipt = np.array([-c+xdisp,-k+ydisp])
+    fpt = np.array([-c+xdisp,-b+ydisp])
+    plot_line(ipt,fpt,w,ax)
+
+    ipt = np.array([c+xdisp,k+ydisp])
+    fpt = np.array([c+xdisp,b2+ydisp])
+    plot_line(ipt,fpt,w,ax)
+
+    ipt = np.array([c+xdisp,-k+ydisp])
+    fpt = np.array([c+xdisp,-b2+ydisp])
+    plot_line(ipt,fpt,w,ax)
+
+    plot_ellipse(a,b,-a1+xdisp,ydisp,np.pi/2,3*np.pi/2)
+    plot_ellipse(a2,b2,a1+xdisp,ydisp,-np.pi/2,np.pi/2)
+    plot_ellipse(a1,b1,xdisp,-k+ydisp,math.acos((a1-dist)/a1),np.pi-math.acos((a1-dist)/a1))
+    plot_ellipse(a1,b1,xdisp,k+ydisp,np.pi+math.acos((a1-dist)/a1),2*np.pi-math.acos((a1-dist)/a1))
+
+    #plt.show()
+def draw_walls_rounded(wmmperpixel,hmmperpixel,dist,radius):
+    #distance: mm 단위로
+    a=3/wmmperpixel
+    b=4.8/hmmperpixel
+    a1=3/wmmperpixel
+    b1=1.945/hmmperpixel
+    c=0.9/hmmperpixel
+
+    k = np.sqrt(np.absolute(a**2-b**2))
+    xdisp=6/wmmperpixel
+    ydisp=4.8/hmmperpixel
+    if wmmperpixel==1 and hmmperpixel==1:
+        xdisp=0.
+        ydisp=0.
+
+    w=0
+    theta_round=math.acos((a-dist-radius)/(a1-(radius*b1)/(np.sqrt(a1**2+b1**2))))
+    h=(b1-radius/np.sqrt(a1**2+b1**2))*np.sin(theta_round)
+    deltah=b1*np.sqrt(1-((a1-dist)/a1)**2)-h
+
+    ipt = np.array([-a1+xdisp,b+ydisp])
+    fpt = np.array([-c+xdisp-radius,b+ydisp])
+    plot_line(ipt,fpt,w,ax)
+
+    ipt = np.array([-a1+xdisp+dist+radius,k+ydisp])
+    fpt = np.array([-c+xdisp-radius,k+ydisp])
+    plot_line(ipt,fpt,w,ax)
+
+    #new lines
+    ipt=np.array([-a1+xdisp+dist,k+ydisp-radius])
+    fpt=np.array([-a1+xdisp+dist,k+ydisp-b1*np.sqrt(1-((a1-dist)/a1)**2)+deltah])
+    plot_line(ipt,fpt,w,ax)
+
+    ipt=np.array([a1+xdisp-dist,k+ydisp-radius])
+    fpt=np.array([a1+xdisp-dist,k+ydisp-b1*np.sqrt(1-((a1-dist)/a1)**2)+deltah])
+    plot_line(ipt,fpt,w,ax)
+    
+    ipt=np.array([-a1+xdisp+dist,-k+ydisp+radius])
+    fpt=np.array([-a1+xdisp+dist,-k+ydisp+b1*np.sqrt(1-((a1-dist)/a1)**2)-deltah])
+    plot_line(ipt,fpt,w,ax)
+    
+    ipt=np.array([a1+xdisp-dist,-k+ydisp+radius])
+    fpt=np.array([a1+xdisp-dist,-k+ydisp+b1*np.sqrt(1-((a1-dist)/a1)**2)-deltah])
+    plot_line(ipt,fpt,w,ax)    
+    #end
+
+    ipt = np.array([c+xdisp+radius,b+ydisp])
+    fpt = np.array([a1+xdisp,b+ydisp])
+    plot_line(ipt,fpt,w,ax)
+
+    ipt = np.array([c+xdisp+radius,k+ydisp])
+    fpt = np.array([a1+xdisp-dist-radius,k+ydisp])
+    plot_line(ipt,fpt,w,ax)
+
+    ipt = np.array([-a1+xdisp+dist+radius,-k+ydisp])
+    fpt = np.array([-c+xdisp-radius,-k+ydisp])
+    plot_line(ipt,fpt,w,ax)
+
+    ipt = np.array([-a1+xdisp,-b+ydisp])
+    fpt = np.array([-c+xdisp-radius,-b+ydisp])
+    plot_line(ipt,fpt,w,ax)
+
+    ipt = np.array([c+xdisp+radius,-k+ydisp])
+    fpt = np.array([a1+xdisp-dist-radius,-k+ydisp])
+    plot_line(ipt,fpt,w,ax)
+
+    ipt = np.array([c+xdisp+radius,-b+ydisp])
+    fpt = np.array([a1+xdisp,-b+ydisp])
+    plot_line(ipt,fpt,w,ax)
+
+    ipt = np.array([-c+xdisp,k+ydisp+radius])
+    fpt = np.array([-c+xdisp,b+ydisp-radius])
+    plot_line(ipt,fpt,w,ax)
+
+    ipt = np.array([-c+xdisp,-k+ydisp-radius])
+    fpt = np.array([-c+xdisp,-b+ydisp+radius])
+    plot_line(ipt,fpt,w,ax)
+
+    ipt = np.array([c+xdisp,k+ydisp+radius])
+    fpt = np.array([c+xdisp,b+ydisp-radius])
+    plot_line(ipt,fpt,w,ax)
+
+    ipt = np.array([c+xdisp,-k+ydisp-radius])
+    fpt = np.array([c+xdisp,-b+ydisp+radius])
+    plot_line(ipt,fpt,w,ax)
+
+    plot_ellipse(a,b,-a1+xdisp,ydisp,np.pi/2,3*np.pi/2)
+    plot_ellipse(a,b,a1+xdisp,ydisp,-np.pi/2,np.pi/2)
+    plot_ellipse(a1,b1,xdisp,-k+ydisp,math.acos((a1-dist)/a1),np.pi-math.acos((a1-dist)/a1))
+    plot_ellipse(a1,b1,xdisp,k+ydisp,np.pi+math.acos((a1-dist)/a1),2*np.pi-math.acos((a1-dist)/a1))
+
+    #plt.show()
