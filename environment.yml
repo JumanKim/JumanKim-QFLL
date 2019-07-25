@@ -1,0 +1,8 @@
+name : Penrose_sim
+channels:
+ - conda-forge
+dependencies:
+ - python
+ - numpy
+ - pip:
+  - pandas
