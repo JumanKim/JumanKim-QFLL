@@ -2,7 +2,12 @@ name : Penrose_sim
 channels:
  - conda-forge
 dependencies:
- - python
+ - bqplot=0.11.2
+ - scikit-learn
+ - scipy
  - numpy
+ - matplotlib
+ - PIL
+ - tqdm
  - pip:
   - pandas
