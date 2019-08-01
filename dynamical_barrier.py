@@ -5,9 +5,10 @@
 
 import math
 import numpy as np
+from bqplot import pyplot as plt
 from scipy.optimize import fsolve
 from scipy.special import ellipeinc
-from tqdm import tqdm,tnrange
+#from tqdm import tqdm
 #import geometry_3 as geo
 #from geometry_3 import geometry
 #import multiprocessing
@@ -1305,7 +1306,7 @@ class geometry:
                 length=iD
             else:
                 theta = np.pi/2+np.arcsin(ipty/b)
-                iD = ellipt_int_length(theta,b,a)
+                iD = ellipt_int_length(theta,a,b)
                 length=self.eta(a,-b,8)+iD
         if(curvenum == 3):
             length=self.eta(a,b,14)+(a-iptx)
@@ -1329,7 +1330,7 @@ class geometry:
             length=self.eta(-c,b,9)+(-c-iptx)
         if(curvenum == 13):
             theta=np.pi/2-np.arcsin(ipty/b)
-            iD=ellipt_int_length(theta,b,a)
+            iD=ellipt_int_length(theta,a,b)
             length=self.eta(-a1,b,1)+iD
         if(curvenum == 6):
             length=self.eta(-a1,-b,13)+(iptx+a1)
@@ -1533,30 +1534,4 @@ class geometry:
                 ray[2]=self.nangle_pt(ray[0],ray[1],ray[3])-np.arcsin(y+h2*j/step2)
                 ##print ray
                 initial.append(np.array([ray[0],ray[1],ray[2],ray[3]]))    #Call by value
-        return initial
-    def IC_real(self,dataset):
-        initial=[]
-        ray=np.array([0.,0.,0.,0.])
-        for i in range(len(dataset)):
-            D=(dataset[i][0])*self.eta(0,0,14)
-            ray[0]=self.eta_inverse(D)[0]
-            ray[1]=self.eta_inverse(D)[1]
-            ray[3]=self.eta_inverse(D)[2]
-            ray[2]=self.nangle_pt(ray[0],ray[1],ray[3])-np.arcsin(dataset[i][1])
-            initial.append(np.array([ray[0],ray[1],ray[2],ray[3]]))
-        return initial
-    def mod_IC_generator(self):
-        import os
-        initial=[]
-        ray=np.array([0.,0.,0.,0.])
-        file=[]
-        Nmax=2
-        focdist=self.focdist
-        cut_angle=self.cut_angle
-        file=[]
-        for m in np.arange(40):
-            filetemp=open(os.getcwd()+"\\textfiles\\try(Nmax=%d)_focdist=%.2f,cut_angle=%.1f" % (Nmax,focdist,cut_angle*180/np.pi)+","+"fray_sim_initial_%d.txt" % m).read().split()
-            file=file+filetemp
-        file=list(map(float,file))
-        initial=[np.array([file[i],file[i+1],file[i+2],int(file[i+3])]) for i in range(0,len(file),4)]
         return initial
